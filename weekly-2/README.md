@@ -59,14 +59,14 @@ Find the last number that remains starting with a list of length `n`.
 
 This is an interesting problem, so I'll try to describe my thought process with detail.
 
-You can go for the naive approach and create an array of numbers, apply the process and find the result... But maybe we can do better (spoilers: we can).
+You can go for the naive approach and create an array of numbers, apply the process and find the result... But maybe we can do better.
 
 With these kind of problems, the best idea is to start with some manual calculations to see if we can get an inituition.
 
 Denote by `f(n)` the remaining number we obtain with a list of length `n`. This is the list of the first 10 numbers:
 
 | `n` | `f(n)` |
-| :--- | :---: |
+| :---: | :---: |
 | 1 | 1 |
 | 2 | 2 |
 | 3 | 2 |
@@ -84,7 +84,7 @@ The second thing we can observe is that there seems to be another pattern, in wh
 
 Ok, so this means we need to find a different approach. For example, is there a way to express `f(n)` in terms of other values? 
 
-Let's check what happens with `n = 12`
+Let's check what happens with `n = 12`:
 
 ```
 Initially: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -99,7 +99,7 @@ Well, when you don't know something, put a name to it. Since we called the left-
 Since we introduced a new function, we can update the previous table and calculate some more values:
 
 | `n` | `f(n)` | `g(n)` |
-| :--- | :---: | :---: |
+| :---: | :---: | :---: |
 | 1 | 1 | 1 |
 | 2 | 2 | 1 |
 | 3 | 2 | 2 |
@@ -111,13 +111,13 @@ Since we introduced a new function, we can update the previous table and calcula
 | 9 | 6 | 4 |
 | 10 | 8 | 3 |
 
-There seems to be yet another interesting pattern: `f(n) + g(n) = n + 1`. This time, let's try to prove it before risking another Wrong Answer.
+There seems to be yet another pattern: `f(n) + g(n) = n + 1`. This time, let's try to prove it before risking another Wrong Answer.
 
 Picking back the previous example, we want to calculate `g(6)`, that is, apply the right-to-left process to `[1, 2, 3, 4, 5, 6]`. For this to yield the same result as `f(6)`, we would actually need to apply the right-to-left process to `[6, 5, 4, 3, 2, 1]`. Notice that `1 + 6 = 2 + 5 = ... = 7`. This means we can apply a transformation to `[1, 2, 3, 4, 5, 6]` by replacing every number `i` by `7 - i`, giving us `[6, 5, 4, 3, 2, 1]`. That is, `g(6) = 7 - f(6)`, or in other words, `f(6) + g(6) = 7`.
 
 The above argument can be generalised to prove our pattern `f(n) + g(n) = n + 1`.
 
-Combining this with what we already knew, we have `f(2k) = 2 * g(k) = 2 * (k + 1 - f(k))` or `f(k) = 2 * g(k / 2) = 2 * (k / 2 + 1 - f(k / 2))`.
+Combining this with what we already knew, we have `f(2k) = 2 * g(k) = 2 * (k + 1 - f(k))`.
 
 ```js
 /*
